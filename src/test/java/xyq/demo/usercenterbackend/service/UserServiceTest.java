@@ -2,6 +2,7 @@ package xyq.demo.usercenterbackend.service;
 import java.util.Date;
 
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import xyq.demo.usercenterbackend.model.User;
@@ -33,7 +34,45 @@ class UserServiceTest {
 
 
          boolean result= userService.save(user);
-        System.out.println(user.getId()); //自动装入id
+        System.out.println(user.getId()); //自动返回装入的id
         assertTrue(result);
+    }
+
+    @Test
+    void userRegister() {
+
+        String userAccount = "yupi";
+        String userPassword = "";
+        String checkPassword = "123456";
+     long result =  userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertEquals(-1, result);
+
+        userAccount = "yu";
+        result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertEquals(-1, result);
+
+
+        userAccount = "yupi";
+        userPassword = "123456";
+        checkPassword = "123456";
+        result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertEquals(-1, result);
+
+        userPassword = "12345678";
+        result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertEquals(-1, result);
+
+        checkPassword = "12345678";
+        result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertEquals(-1, result);
+
+
+
+//        userAccount = "yupi";
+//        userPassword = "12345678";
+//        checkPassword = "12345678";
+//        result = userService.userRegister(userAccount, userPassword, checkPassword);
+//        Assertions.assertTrue(result > 0);
+
     }
 }
