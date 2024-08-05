@@ -1,4 +1,4 @@
-package xyq.demo.usercenterbackend.service.service;
+package xyq.demo.usercenterbackend.service;
 
 import xyq.demo.usercenterbackend.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -9,5 +9,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-08-05 09:55:10
 */
 public interface UserService extends IService<User> {
+
+
+
+   long userRegister(String userAccount, String userPassword,String checkPassword);
+
 
 }

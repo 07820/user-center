@@ -1,9 +1,7 @@
-package xyq.demo.usercenterbackend.service.service;
+package xyq.demo.usercenterbackend.service;
 import java.util.Date;
 
 import jakarta.annotation.Resource;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import xyq.demo.usercenterbackend.model.User;
