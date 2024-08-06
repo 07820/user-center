@@ -68,11 +68,11 @@ class UserServiceTest {
 
 
 
-//        userAccount = "yupi";
-//        userPassword = "12345678";
-//        checkPassword = "12345678";
-//        result = userService.userRegister(userAccount, userPassword, checkPassword);
-//        Assertions.assertTrue(result > 0);
+        userAccount = "yupi1    ";
+        userPassword = "12345678";
+        checkPassword = "12345678";
+        result = userService.userRegister(userAccount, userPassword, checkPassword);
+        Assertions.assertTrue(result > 0);
 
     }
 }

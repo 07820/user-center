@@ -12,15 +12,7 @@ import java.security.NoSuchAlgorithmException;
 class UserCenterBackendApplicationTests {
 
 
-//    @Test
-//    void testDigest() throws NoSuchAlgorithmException {
-//
-//        MessageDigest md5 = MessageDigest.getInstance("MD5");
-//        byte[] bytes= md5.digest("abcd".getBytes(StandardCharsets.UTF_8));
-////            String.valueof(bytes);
-//        String result = new String(bytes);
-//        System.out.println(result);
-//    }
+
 
     @Test
     void testDigest() throws NoSuchAlgorithmException {
