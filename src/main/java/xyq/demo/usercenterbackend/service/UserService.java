@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserService extends IService<User> {
 
 
+//  String USER_SESSION_KEY ="userSessionKey";
+
     long userRegister(String userAccount, String userPassword, String checkPassword);
 
 

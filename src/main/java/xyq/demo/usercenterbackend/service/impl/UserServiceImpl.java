@@ -34,7 +34,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     private static final String SALT = "XYQ";
     //用户登录态键
-    private static final String USER_SESSION_KEY ="userSessionKey";
+    public static final String USER_SESSION_KEY ="userSessionKey";
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -113,7 +113,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 return null;
             }
 
-
             //
             String validPattern = "\\pP|\\pS|\\s+";
             Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
@@ -147,11 +146,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setEmail(user.getEmail());
         safetyUser.setUserStatus(user.getUserStatus());
         safetyUser.setCreateTime(user.getCreateTime());
+        safetyUser.setUserRole(user.getUserRole());
 //        safetyUser.setUpdateTime(new Date());
 //        safetyUser.setIsDelete(0);
 
         //记录用户登录态！
       request.getSession().setAttribute(USER_SESSION_KEY,user);
+
 
         return safetyUser;
         }
