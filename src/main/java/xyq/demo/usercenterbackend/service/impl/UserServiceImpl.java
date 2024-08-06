@@ -96,12 +96,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User doLogin(String userAccount, String userPassword, String checkPassword, HttpServletRequest request) {
+    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
 
 
             //1.校验
 //        if(userAccount == null || userPassword == null || checkPassword == null){
-            if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
+            if (StringUtils.isAnyBlank(userAccount, userPassword)) {
 
                 return null;
             }
@@ -109,7 +109,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 return null;
             }
 
-            if (userPassword.length() < 8 || checkPassword.length() < 8) {
+            if (userPassword.length() < 8 ) {
                 return null;
             }
 
