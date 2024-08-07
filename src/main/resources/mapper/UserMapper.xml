@@ -27,4 +27,5 @@
         createTime,updateTime,isDelete,
         userRole
     </sql>
+
 </mapper>

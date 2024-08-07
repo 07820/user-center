@@ -13,6 +13,7 @@ import xyq.demo.usercenterbackend.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static xyq.demo.usercenterbackend.constant.UserConstant.ADMIN_ROLE;
 import static xyq.demo.usercenterbackend.constant.UserConstant.USER_SESSION_KEY;
@@ -26,12 +27,10 @@ public class UserController {
 
     @PostMapping("/register")
     public Long userRegister(@RequestBody UserRegisterRequest userRegisterrequest) {
-        //1.校验
 
         if (userRegisterrequest == null) {
             return null;
         }
-
         String userAccount = userRegisterrequest.getUserAccount();
         String userPassword = userRegisterrequest.getUserPassword();
         String checkPassword = userRegisterrequest.getCheckPassword();
@@ -39,7 +38,6 @@ public class UserController {
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             return null;
         }
-
 
         long id = userService.userRegister(userAccount, userPassword, checkPassword);
         return id;
@@ -54,15 +52,12 @@ public class UserController {
             return null;
         }
 
-
         String userAccount = userLoginInRequest.getUserAccount();
         String userPassword = userLoginInRequest.getUserPassword();
-
 
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             return null;
         }
-
         return userService.userLogin(userAccount, userPassword, request);
     }
 
@@ -71,16 +66,15 @@ public class UserController {
 
         if (!isAdmin(request)) {
             return new ArrayList<>();
-
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 
         if (StringUtils.isNotBlank(username)) {
             queryWrapper.like("username", username);
         }
-
-
-        return userService.list(queryWrapper);
+        //return userService.list(queryWrapper);
+        List<User> userList = userService.list(queryWrapper);
+        return userList.stream().map(user -> userService.getSafetyUser(user)).toList();
 
     }
 
@@ -88,18 +82,15 @@ public class UserController {
     public boolean deleteUser(@RequestBody long id, HttpServletRequest request) {
         if (!isAdmin(request)) {
             return false;
-
         }
-
         if (id <= 0) {
-
             return false;
-
         }
+
 
         return userService.removeById(id);
-
     }
+
 
     //是否为管理员？
     private boolean isAdmin(HttpServletRequest request) {

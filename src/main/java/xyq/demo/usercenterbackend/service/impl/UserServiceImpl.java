@@ -1,5 +1,4 @@
 package xyq.demo.usercenterbackend.service.impl;
-import java.util.Date;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,14 +18,14 @@ import java.util.regex.Pattern;
 
 
 /**
-* @author 徐岩奇
-* @description 针对表【user(user)】的数据库操作Service实现
-* @createDate 2024-08-05 09:55:10
-*/
+ * @author 徐岩奇
+ * @description 针对表【user(user)】的数据库操作Service实现
+ * @createDate 2024-08-05 09:55:10
+ */
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-    implements UserService {
+        implements UserService {
 
     @Resource
     private UserMapper userMapper;
@@ -34,7 +33,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     private static final String SALT = "XYQ";
     //用户登录态键
-    public static final String USER_SESSION_KEY ="userSessionKey";
+    public static final String USER_SESSION_KEY = "userSessionKey";
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -52,14 +51,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return -1;
         }
 
-
         //
         String validPattern = "\\pP|\\pS|\\s+";
         Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
         if (matcher.find()) {
             return -1;
         }
-
 
         if (!userPassword.equals(checkPassword)) {
             return -1;
@@ -99,64 +96,69 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
 
 
-            //1.校验
+        //1.校验
 //        if(userAccount == null || userPassword == null || checkPassword == null){
-            if (StringUtils.isAnyBlank(userAccount, userPassword)) {
+        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
 
-                return null;
-            }
-            if (userAccount.length() < 4) {
-                return null;
-            }
+            return null;
+        }
+        if (userAccount.length() < 4) {
+            return null;
+        }
 
-            if (userPassword.length() < 8 ) {
-                return null;
-            }
+        if (userPassword.length() < 8) {
+            return null;
+        }
 
-            //
-            String validPattern = "\\pP|\\pS|\\s+";
-            Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
-            if (matcher.find()) {
-                return null;
-            }
+        //
+        String validPattern = "\\pP|\\pS|\\s+";
+        Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
+        if (matcher.find()) {
+            return null;
+        }
 
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            //用户存在吗
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("userAccount", userAccount);
-            queryWrapper.eq("userPassword", encryptPassword);
+        //用户存在吗
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        queryWrapper.eq("userPassword", encryptPassword);
         User user = userMapper.selectOne(queryWrapper);
 
 
-      if(user==null) {
-          log.info("user log in failed");
-          return null;  //等会改成自定义异常
-      }
+        if (user == null) {
+            log.info("user log in failed");
+            return null;  //等会改成自定义异常
+        }
 
 
-//用户脱敏,模仿DTO类，避免敏感数据返回给前端
-        User safetyUser = new User();
-        safetyUser.setId(user.getId());
-        safetyUser.setUserName(user.getUserName());
-        safetyUser.setUserAccount(user.getUserAccount());
-        safetyUser.setAvatarUrl(user.getAvatarUrl());
-        safetyUser.setGender(user.getGender());
-//        safetyUser.setUserPassword("");
-        safetyUser.setPhone(user.getPhone());
-        safetyUser.setEmail(user.getEmail());
-        safetyUser.setUserStatus(user.getUserStatus());
-        safetyUser.setCreateTime(user.getCreateTime());
-        safetyUser.setUserRole(user.getUserRole());
-//        safetyUser.setUpdateTime(new Date());
-//        safetyUser.setIsDelete(0);
+        User safetyUser = getSafetyUser(user);
 
         //记录用户登录态！
-      request.getSession().setAttribute(USER_SESSION_KEY,user);
+        request.getSession().setAttribute(USER_SESSION_KEY, user);
 
 
         return safetyUser;
-        }
     }
+
+
+    //脱敏
+    @Override
+    public User getSafetyUser(User OriginUser) {
+        User safetyUser = new User();
+        safetyUser.setId(OriginUser.getId());
+        safetyUser.setUserName(OriginUser.getUserName());
+        safetyUser.setUserAccount(OriginUser.getUserAccount());
+        safetyUser.setAvatarUrl(OriginUser.getAvatarUrl());
+        safetyUser.setGender(OriginUser.getGender());
+        safetyUser.setPhone(OriginUser.getPhone());
+        safetyUser.setEmail(OriginUser.getEmail());
+        safetyUser.setUserStatus(OriginUser.getUserStatus());
+        safetyUser.setCreateTime(OriginUser.getCreateTime());
+        safetyUser.setUserRole(OriginUser.getUserRole());
+        return safetyUser;
+    }
+
+}
 
 
 
