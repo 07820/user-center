@@ -68,7 +68,7 @@ class UserServiceTest {
 
 
 
-        userAccount = "yupi1    ";
+        userAccount = "yupi2";
         userPassword = "12345678";
         checkPassword = "12345678";
         result = userService.userRegister(userAccount, userPassword, checkPassword);
